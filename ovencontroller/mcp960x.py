@@ -230,7 +230,7 @@ class MCP960x:
 		read = i2c_msg.read(self.addr, len)
 		self.bus.i2c_rdwr(write, read)
 
-		return bytearray(read.buf.value)
+		return bytearray(bytes(read))
 
 
 	def _write(self, reg, data):
