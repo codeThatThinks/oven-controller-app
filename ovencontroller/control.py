@@ -8,7 +8,7 @@ import gpio
 import rpi_hardware_pwm as pwm
 import smbus2
 
-import buzzer
+from buzzer import Buzzer
 import mcp960x
 
 
@@ -59,7 +59,7 @@ def main(exit):
 		logging.info("Initialized SSR PWM")
 
 		# Buzzer soft-PWM process
-		buzzer.Buzzer(GPIO_BUZZER, BUZZER_FREQ)
+		buzzer = Buzzer(GPIO_BUZZER, BUZZER_FREQ)
 		logging.info("Initialized buzzer")
 
 		# Thermocouple ICs

@@ -131,8 +131,10 @@ class MCP960x:
 		elif rev[0] == 0x41:
 			self.chip = "MCP9601"
 		else:
-			logging.critical("I2C device at 0x{:02X} is not an MCP9600 or MCP9601!".format(self.addr))
-			raise Exception("I2C device at 0x{:02X} is not an MCP9600 or MCP9601!".format(self.addr))
+			logging.critical(f"I2C device at 0x{self.addr:02X} is not an MCP9600 or MCP9601!")
+			raise Exception(f"I2C device at 0x{self.addr:02X} is not an MCP9600 or MCP9601!")
+
+		logging.info(f"Found a {self.chip} at I2C address 0x{self.addr:02X}")
 
 		self.rev_major = (rev[1] & 0xf) >> 4
 		self.rev_minor = rev[1] & 0xf
@@ -170,8 +172,8 @@ class MCP960x:
 		self.cold_res = cold_res
 		self.burst_samples = burst_samples
 
-		self._write(REG_TC_CONF, [(tc_type << 4) | filter_level])
-		self._write(REG_DEV_CONF, [(cold_res << 7) | (adc_res << 5) | (burst_samples << 2) | Mode.SHUTDOWN])
+		self._write(REG_TC_CONF, bytearray([(tc_type << 4) | filter_level]))
+		self._write(REG_DEV_CONF, bytearray([(cold_res << 7) | (adc_res << 5) | (burst_samples << 2) | Mode.SHUTDOWN]))
 
 
 	def read_temp(self):
@@ -179,7 +181,7 @@ class MCP960x:
 
 		self._set_mode(Mode.BURST)
 
-		self._write(REG_STATUS, [0x00])
+		self._write(REG_STATUS, bytearray([0x00]))
 		burst_start_time = time.time()
 		while(((self._read(REG_STATUS, 1))[0] & 0x80) != 0x80):
 			if time.time() > (burst_start_time + BURST_TIMEOUT):
@@ -224,15 +226,15 @@ class MCP960x:
 	def _read(self, reg, len):
 		"""Read from a specified register"""
 
-		write = i2c_msg.write(self.addr, [reg])
+		write = i2c_msg.write(self.addr, bytearray(reg))
 		read = i2c_msg.read(self.addr, len)
 		self.bus.i2c_rdwr(write, read)
 
-		return read.buf
+		return bytearray(read.buf.value)
 
 
 	def _write(self, reg, data):
 		"""Write to a specified register"""
 
-		write = i2c_msg.write(self.addr, [reg] + data)
+		write = i2c_msg.write(self.addr, bytearray(reg) + data)
 		self.bus.i2c_rdwr(write)

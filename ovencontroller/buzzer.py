@@ -17,7 +17,7 @@ class Buzzer:
 		self.pin = pin
 		self.freq = freq
 
-		gpio.setup(gpio, gpio.OUT)
+		gpio.setup(pin, gpio.OUT)
 
 		self.queue = multiprocessing.Queue(QUEUE_SIZE)
 		self.process = multiprocessing.Process(target=self._process, args=(pin, freq, self.queue,))
@@ -39,8 +39,8 @@ class Buzzer:
 	def cleanup(self):
 		"""Cleanup"""
 
-		self.q.close()
-		self.p.terminate()
+		self.queue.close()
+		self.process.terminate()
 		gpio.cleanup(self.pin)
 
 
