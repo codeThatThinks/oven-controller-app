@@ -25,7 +25,7 @@ class Buzzer:
 
 
 	def beep(duration):
-	"""Add a beep to the buzzer queue"""
+		"""Add a beep to the buzzer queue"""
 
 		self.queue.put(duration)
 
