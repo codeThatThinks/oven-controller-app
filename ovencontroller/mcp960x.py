@@ -226,7 +226,7 @@ class MCP960x:
 	def _read(self, reg, len):
 		"""Read from a specified register"""
 
-		write = i2c_msg.write(self.addr, bytearray(reg))
+		write = i2c_msg.write(self.addr, bytearray([reg]))
 		read = i2c_msg.read(self.addr, len)
 		self.bus.i2c_rdwr(write, read)
 
@@ -236,5 +236,5 @@ class MCP960x:
 	def _write(self, reg, data):
 		"""Write to a specified register"""
 
-		write = i2c_msg.write(self.addr, bytearray(reg) + data)
+		write = i2c_msg.write(self.addr, bytearray([reg]) + data)
 		self.bus.i2c_rdwr(write)
