@@ -9,8 +9,9 @@ from gui_views import *
 DEFAULT_FONT = QtGui.QFont("Open Sans", pointSize=16)
 
 
-"""Main loop"""
 def main(exit, argv):
+	"""Main loop"""
+
 	app = QtWidgets.QApplication(argv)
 	app.setFont(DEFAULT_FONT)
 

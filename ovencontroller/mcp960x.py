@@ -61,8 +61,8 @@ REV_MINOR			= (0xF << 0)
 REV_MAJOR			= (0xF << 4)
 
 
-"""Thermocouple type"""
-class TcType(enum.Enum):
+class TcType(enum.IntEnum):
+	"""Thermocouple type"""
 	K_TYPE			= 0b000
 	J_TYPE			= 0b001
 	T_TYPE			= 0b010
@@ -73,15 +73,15 @@ class TcType(enum.Enum):
 	R_TYPE			= 0b111
 
 
-"""Shutdown modes"""
-class Mode(enum.Enum):
+class Mode(enum.IntEnum):
+	"""Shutdown modes"""
 	NORMAL			= 0b00
 	SHUTDOWN		= 0b01
 	BURST			= 0b10
 
 
-"""Burst mode samples"""
-class BurstSamples(enum.Enum):
+class BurstSamples(enum.IntEnum):
+	"""Burst mode samples"""
 	BURST_1			= 0b000
 	BURST_2			= 0b001
 	BURST_4			= 0b010
@@ -92,22 +92,23 @@ class BurstSamples(enum.Enum):
 	BURST_128		= 0b111
 
 
-"""ADC measurement resolution"""
-class ADCRes(enum.Enum):
+class ADCRes(enum.IntEnum):
+	"""ADC measurement resolution"""
 	ADC_18_BIT		= 0b00
 	ADC_16_BIT		= 0b01
 	ADC_14_BIT		= 0b10
 	ADC_12_BIT		= 0b11
 
 
-"""Cold junction resolution"""
-class ColdRes(enum.Enum):
+class ColdRes(enum.IntEnum):
+	"""Cold junction resolution"""
 	COLD_0_0625C	= 0
 	COLD_0_25C		= 1
 
 
-"""MCP960x base class"""
 class MCP960x:
+	"""MCP960x base class"""
+
 	def __init__(self, bus, addr, tc_type=TcType.K_TYPE, filter_level=0, adc_res=ADCRes.ADC_18_BIT, cold_res=ColdRes.COLD_0_0625C, burst_samples=BurstSamples.BURST_1):
 		"""Class constructor"""
 
@@ -143,12 +144,12 @@ class MCP960x:
 		self.configure(tc_type, filter_level, adc_res, cold_res)
 
 
-	def configure(tc_type=TcType.K_TYPE, filter_level=0, adc_res=ADCRes.ADC_18_BIT, cold_res=ColdRes.COLD_0_0625C, burst_samples=BurstSamples.BURST_1):
+	def configure(self, tc_type=TcType.K_TYPE, filter_level=0, adc_res=ADCRes.ADC_18_BIT, cold_res=ColdRes.COLD_0_0625C, burst_samples=BurstSamples.BURST_1):
 		"""Configure chip"""
 
 		if tc_type not in [item.value for item in TcType]:
 			logging.warning("Invalid thermocouple type; defaulting to K-type...")
-			tc_type = TcType.TYPE_K
+			tc_type = TcType.K_TYPE
 
 		if filter_level not in range(0,8):
 			logging.warning("Invalid filter level; defaulting to 0 (off)...")

@@ -24,13 +24,13 @@ class Buzzer:
 		self.process.start()
 
 
-	def beep(duration):
+	def beep(self, duration):
 		"""Add a beep to the buzzer queue"""
 
 		self.queue.put(duration)
 
 
-	def pause(duration):
+	def pause(self, duration):
 		"""Add a pause to the buzzer queue"""
 
 		self.queue.put(-duration)
