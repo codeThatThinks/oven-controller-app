@@ -8,6 +8,10 @@ import gpio
 
 QUEUE_SIZE = 16
 
+
+logger = logging.getLogger(__name__)
+
+
 class Buzzer:
 	"""Buzzer soft-PWM"""
 

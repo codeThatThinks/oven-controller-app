@@ -61,6 +61,9 @@ REV_MINOR			= (0xF << 0)
 REV_MAJOR			= (0xF << 4)
 
 
+logger = logging.getLogger(__name__)
+
+
 class TcType(enum.IntEnum):
 	"""Thermocouple type"""
 	K_TYPE			= 0b000
@@ -132,10 +135,10 @@ class MCP960x:
 		elif rev[0] == 0x41:
 			self.chip = "MCP9601"
 		else:
-			logging.critical(f"I2C device at 0x{self.addr:02X} is not an MCP9600 or MCP9601!")
+			logger.critical(f"I2C device at 0x{self.addr:02X} is not an MCP9600 or MCP9601!")
 			raise Exception(f"I2C device at 0x{self.addr:02X} is not an MCP9600 or MCP9601!")
 
-		logging.info(f"Found a {self.chip} at I2C address 0x{self.addr:02X}")
+		logger.info(f"Found a {self.chip} at I2C address 0x{self.addr:02X}")
 
 		self.rev_major = (rev[1] & 0xf) >> 4
 		self.rev_minor = rev[1] & 0xf
@@ -148,23 +151,23 @@ class MCP960x:
 		"""Configure chip"""
 
 		if tc_type not in [item.value for item in TcType]:
-			logging.warning("Invalid thermocouple type; defaulting to K-type...")
+			logger.warning("Invalid thermocouple type; defaulting to K-type...")
 			tc_type = TcType.K_TYPE
 
 		if filter_level not in range(0,8):
-			logging.warning("Invalid filter level; defaulting to 0 (off)...")
+			logger.warning("Invalid filter level; defaulting to 0 (off)...")
 			filter_level = 0
 
 		if adc_res not in [item.value for item in ADCRes]:
-			logging.warning("Invalid ADC resolution; defaulting to 18-bit...")
+			logger.warning("Invalid ADC resolution; defaulting to 18-bit...")
 			adc_res = ADCRes.ADC_18_BIT
 
 		if cold_res not in [item.value for item in ColdRes]:
-			logging.warning("Invalid cold junction resolution; defaulting to 0.0625°C...")
+			logger.warning("Invalid cold junction resolution; defaulting to 0.0625°C...")
 			cold_res = ColdRes.COLD_0_0625C
 
 		if burst_samples not in [item.value for item in BurstSamples]:
-			logging.warning("Invalid number of burst samples; defaulting to 1...")
+			logger.warning("Invalid number of burst samples; defaulting to 1...")
 			burst_samples = BurstSamples.BURST_1
 
 		self.tc_type = tc_type
@@ -186,7 +189,7 @@ class MCP960x:
 		burst_start_time = time.time()
 		while(((self._read(REG_STATUS, 1))[0] & 0x80) != 0x80):
 			if time.time() > (burst_start_time + BURST_TIMEOUT):
-				logging.warning("Timed out waiting for temperature conversion")
+				logger.warning("Timed out waiting for temperature conversion")
 				break
 
 			time.sleep(0.001)	# don't eat CPU
@@ -215,7 +218,7 @@ class MCP960x:
 		"""Set device mode"""
 
 		if mode not in [item.value for item in Mode]:
-			logging.error("Invalid device mode...")
+			logger.error("Invalid device mode...")
 			return
 
 		data = self._read(REG_DEV_CONF, 1)

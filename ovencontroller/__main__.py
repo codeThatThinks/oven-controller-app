@@ -7,8 +7,12 @@ import time
 import control, gui
 
 
+logger = logging.getLogger(__name__)
+
+
 if __name__ == "__main__":
 	# run the entire app for real
+	logging.basicConfig(level=logging.DEBUG)
 
 	with multiprocessing.Manager() as manager:
 		exit = manager.Event()
@@ -33,6 +37,7 @@ if __name__ == "__main__":
 		# if any process exits, shutdown other processes
 		while(True):
 			if not p_control.is_alive() or not p_gui.is_alive():
+				logger.info("Detected one or more processes has exited. Shutting down remaining processes...")
 				exit.set()
 				break
 

@@ -33,6 +33,9 @@ TC2_TYPE = mcp960x.TcType.K_TYPE
 LOOP_RATE = 10		# Hz
 
 
+logger = logging.getLogger(__name__)
+
+
 def main(exit):
 	"""Main loop"""
 
@@ -46,38 +49,38 @@ def main(exit):
 	try:
 		# E-stop and convection fan GPIO
 		gpio.setup(GPIO_ESTOP, gpio.IN)
-		logging.info("Initialized e-stop input")
+		logger.info("Initialized e-stop input")
 
 		gpio.setup(GPIO_FAN, gpio.OUT, initial=gpio.LOW)
-		logging.info("Initialized convection fan output")
+		logger.info("Initialized convection fan output")
 
 		# SSR PWM
 		pwm_ssr1 = pwm.HardwarePWM(pwm_channel=PWM_CH_SSR1, hz=LOOP_RATE)
 		pwm_ssr1.stop()
 		pwm_ssr2 = pwm.HardwarePWM(pwm_channel=PWM_CH_SSR2, hz=LOOP_RATE)
 		pwm_ssr2.stop()
-		logging.info("Initialized SSR PWM")
+		logger.info("Initialized SSR PWM")
 
 		# Buzzer soft-PWM process
 		buzzer = Buzzer(GPIO_BUZZER, BUZZER_FREQ)
-		logging.info("Initialized buzzer")
+		logger.info("Initialized buzzer")
 
 		# Thermocouple ICs
 		i2c = smbus2.SMBus(I2C_BUS)
-		logging.info(f"Initialized I2C bus {I2C_BUS}")
+		logger.info(f"Initialized I2C bus {I2C_BUS}")
 
 		tc1 = mcp960x.MCP960x(i2c, TC1_ADDR, tc_type=TC1_TYPE, adc_res=TC_ADC_RES, cold_res=TC_COLD_RES)
-		logging.info("Initialized thermocouple 1")
+		logger.info("Initialized thermocouple 1")
 		tc2 = mcp960x.MCP960x(i2c, TC2_ADDR, tc_type=TC2_TYPE, adc_res=TC_ADC_RES, cold_res=TC_COLD_RES)
-		logging.info("Initialized thermocouple 2")
+		logger.info("Initialized thermocouple 2")
 
 		buzzer.beep(0.1)
 		buzzer.pause(1)
 		buzzer.beep(0.1)
 
 		# Main control loop
-		logging.info(f"Loop rate is {LOOP_RATE} Hz")
-		logging.info("Entering main loop...")
+		logger.info(f"Loop rate is {LOOP_RATE} Hz")
+		logger.info("Entering main loop...")
 		while(True):
 			# infrequent safety checks
 			# - check e-stop status
@@ -99,7 +102,7 @@ def main(exit):
 			time.sleep(1)
 
 			if exit is not None and exit.is_set():
-				logging.info("Exit event received, shutting down...")
+				logger.info("Exit event received, shutting down...")
 				break
 
 	finally:
@@ -114,5 +117,6 @@ def main(exit):
 
 if __name__ == "__main__":
 	# run the hardware control process by itself
-	logging.info("Running hardware control process by itself")
+	logging.basicConfig(level=logging.DEBUG)
+	logger.info("Running hardware control process by itself")
 	main(None)

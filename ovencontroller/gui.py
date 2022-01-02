@@ -9,6 +9,9 @@ from gui_views import *
 DEFAULT_FONT = QtGui.QFont("Open Sans", pointSize=16)
 
 
+logger = logging.getLogger(__name__)
+
+
 def main(exit, argv):
 	"""Main loop"""
 
@@ -26,4 +29,6 @@ def main(exit, argv):
 
 if __name__ == "__main__":
 	# run gui by itself
+	logging.basicConfig(level=logging.DEBUG)
+	logger.info("Running gui process by itself")
 	main(None, sys.argv)
