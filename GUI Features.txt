@@ -1,0 +1,108 @@
+initial setup
+- configure I/O
+	- Thermocouple 1
+		- type: disabled or K,J,T,N,S,E,B,R
+		- display value
+	- Thermocouple 2
+		- type: disabled or K,J,T,N,S,E,B,R
+		- display value
+	- SSR 1
+		- option 1: disabled
+		- option 2: independent heating element
+		- option 3: combined heating element
+		- test button, max 10s
+	- SSR 2
+		- option 1: disabled
+		- option 2: independent heating element
+		- option 3: combine heating element
+		- test button, max 10s
+	- GPO
+		- option 1: disabled
+		- option 2: convection fan
+		- test button, max 10s
+	- GPI
+		- option 1: disabled
+		- option 2: e-stop switch
+		- display value
+- hotspot or connect to wifi (optional)
+- measure oven properties
+	- heat up test
+	- hold test
+	- cool down test
+	- display results
+- program the eeprom
+
+start up
+- accept disclaimer
+- check for updates
+
+main screen
+- idle
+	- current temperature
+	- selected profile
+	- change profile button
+	- start button
+	- settings button
+	- qr button
+- operating
+	- current profile stage
+	- temperature graph
+		- target reflow profile
+		- actual reflow profile
+	- target temperature
+	- actual temperature
+	- stop button
+	- user prompts
+
+select profile
+- profile list
+- edit button for each profile
+
+settings
+- wifi
+	- disabled
+	- hotspot
+		- ssid
+		- security
+	- connect to wifi
+		- scan
+		- ssid
+		- password
+- I/O
+	- SSR 1
+		- option 1: disabled
+		- option 2: independent heating element
+		- option 3: combined heating element
+		- test button, max 10s
+	- SSR 2
+		- option 1: disabled
+		- option 2: independent heating element
+		- option 3: combine heating element
+		- test button, max 10s
+	- GPO
+		- option 1: disabled
+		- option 2: convection fan
+		- test button, max 10s
+	- GPI
+		- option 1: disabled
+		- option 2: e-stop switch
+		- display value
+	- Thermocouple 1
+		- type: disabled or K,J,T,N,S,E,B,R
+		- display value
+	- Thermocouple 2
+		- type: disabled or K,J,T,N,S,E,B,R
+		- display value
+- tuning
+	- P, I, D
+
+- profile creation
+	- profile is a sequence of named zones
+	- zone types
+		- constant temperature
+			- fixed temperature
+			- fixed duration, or
+			- until stopped + timeout
+		- ramp
+			- fixed rate (deg/sec)
+			- fixed duration
